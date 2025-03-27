@@ -7,47 +7,113 @@ st.write(
     "Upload a document below and ask a question about it – GPT will answer! "
     "To use this app, you need to provide an OpenAI API key, which you can get [here](https://platform.openai.com/account/api-keys). "
 )
+st.header('This is a header')
+st.subheader('This is a subheader')
+st.text('AI VIET NAM')
+st.caption('This is a caption')
 
-# Ask user for their OpenAI API key via `st.text_input`.
-# Alternatively, you can store the API key in `./.streamlit/secrets.toml` and access it
-# via `st.secrets`, see https://docs.streamlit.io/develop/concepts/connections/secrets-management
-openai_api_key = st.text_input("OpenAI API Key", type="password")
-if not openai_api_key:
-    st.info("Please add your OpenAI API key to continue.", icon="🗝️")
+st.divider()
+
+st.markdown('# Heading 1')
+st.markdown('[AI VIET NAM](http://aivnlearning.edu.vn)')
+st.markdown("""
+            1. Machine Learning
+            2. Deep Learning
+""")
+st.markdown(r'$ \sqrt{2x} $')
+
+st.divider()
+
+st.latex('\sqrt{2x}')
+
+st.divider()
+
+st.write('AI Viet Nam')
+st.write('# Heading 1')
+st.write('[Google](http://google.com)')
+st.write(r'$\sqrt{2x}$')
+st.write('1 - 1 = ', 2)
+
+st.divider()
+st.code("""
+    import random
+    value = random.randint(3, 10)
+    print(value)
+""")
+
+def get_year():
+    return '2003'
+
+with st.echo():
+    st.write('This is a text')
+    def get_name():
+        return 'Vang'
+    
+    name = get_name()
+    year = get_year()
+    st.write(name, year)
+
+st.divider()
+
+st.logo('/workspaces/Module-1-Streamlit/logo.png')
+st.image('/workspaces/Module-1-Streamlit/image.jpg', caption='Robot and AI', use_column_width='always')
+
+st.divider()
+
+def get_full_name():
+    return 'Vang'
+
+agree = st.checkbox('I agree!', on_change=get_full_name)
+if agree:
+    st.write('Thank!')
+
+status = st.radio('Your favorite color:', ['Yellow', 'Blue'], captions=['Yellow', 'Blue'])
+print(status)
+
+status = st.selectbox('Your contact', ['Email', 'Address'])
+print(status)
+
+options = st.multiselect('Colors:', ['Green', 'Yellow', 'Blue'])
+print(options)
+
+st.select_slider('Your colors:', [0, 1, 2])
+
+st.divider()
+
+if st.button('Say Hello'):
+    st.write('Hi! How can I help')
 else:
+    st.write('Goodbye')
 
-    # Create an OpenAI client.
-    client = OpenAI(api_key=openai_api_key)
+value = st.text_input('Your name:', value='Vang')
+st.write(value)
 
-    # Let the user upload a file via `st.file_uploader`.
-    uploaded_file = st.file_uploader(
-        "Upload a document (.txt or .md)", type=("txt", "md")
-    )
+st.divider()
 
-    # Ask the user for a question via `st.text_area`.
-    question = st.text_area(
-        "Now ask a question about the document!",
-        placeholder="Can you give me a short summary?",
-        disabled=not uploaded_file,
-    )
+upload_files = st.file_uploader('Choose Files:', accept_multiple_files=True)
+for upload_file in upload_files:
+    read_f = upload_file.read()
+    st.write('File name: ', upload_file.name)
 
-    if uploaded_file and question:
+st.divider()
 
-        # Process the uploaded file and question.
-        document = uploaded_file.read().decode()
-        messages = [
-            {
-                "role": "user",
-                "content": f"Here's a document: {document} \n\n---\n\n {question}",
-            }
-        ]
+with st.form('my form'):
+    col1, col2 = st.columns(2)
+    f_name = col1.text_input('Name:')
+    f_age = col2.text_input('Age:')
 
-        # Generate an answer using the OpenAI API.
-        stream = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=messages,
-            stream=True,
-        )
+    submited = st.form_submit_button('Submit')
+    if submited:
+        st.write(f'Name: {f_name}, Age: {f_age}')
 
-        # Stream the response to the app using `st.write_stream`.
-        st.write_stream(stream)
+st.divider()
+
+import random
+value = random.randint(1, 10)
+
+if 'key' not in st.session_state:
+    st.session_state['key'] = value
+    st.session_state['password'] = value
+st.write(st.session_state.key)
+
+st.divider()
